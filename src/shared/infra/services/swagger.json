@@ -1,0 +1,97 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "01 - Linx Challenge Products API",
+    "description": "some information about my Linx back end...",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "localhost:3333",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Repositories",
+      "description": "https://github.com/Fernandoaml/01-linx-challenge-products-api"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "consumes":[
+    "application/json"
+  ],
+  "produces":[
+    "application/json"
+  ],
+  "paths": {
+    "/products":{
+      "post": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Create a new document through business rule.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Products",
+            "description": "Create a new Product",
+            "schema": {
+              "$ref": "#/definitions/New_Product"
+            }
+          }
+        ],
+        "produces":[
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error, review the product data."
+          },
+          "400": {
+            "description": "Failed.. Bad post data."
+          },
+          "429": {
+            "description": "Too many requests with the same data."
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "New_Product": {
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Ex: 192333"
+        },
+        "name": {
+          "type": "string",
+          "description": "Ex: Cadeira"
+        }
+      }
+    },
+    "Product": {
+      "type": "object",
+      "properties": {
+        "products":{
+          "$ref": "#/definitions/New_Product"
+        },
+        "fullDate": {
+          "type": "number"
+        },
+        "ip": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
