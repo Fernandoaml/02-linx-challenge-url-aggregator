@@ -11,7 +11,7 @@ export default class ProductsController {
   public async index(request: Request, response: Response): Promise<Response> {
     const readDumpFileService = container.resolve(ReadDumpFileService);
     const dumpData = await readDumpFileService.execute();
-    console.log(dumpData);
+    console.log(dumpData.length);
 
     // const { ip } = request;
     // const product = {

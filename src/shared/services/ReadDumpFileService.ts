@@ -24,19 +24,25 @@ class ReadDumpFile {
         err != null ? reject(err) : resolve(filenames),
       );
     });
+
     process.chdir(dumpFolder);
-    dumpFolderFiles.forEach(async (value, index) => {
-      await decompress(
-        dumpFolderFiles[index],
-        path.resolve(dumpFolder, '..', 'extracted'),
-      ).then();
-      await moveFile(
-        `${dumpFolder}/${dumpFolderFiles[index]}`,
-        `${path.resolve(dumpFolder, '..', 'readedFile')}/${
-          dumpFolderFiles[index]
-        }.${Date.now()}`,
-      );
-    });
+    if (dumpFolderFiles.length !== 0) {
+      await new Promise(resolve => {
+        dumpFolderFiles.forEach(async (_, index) => {
+          await decompress(
+            dumpFolderFiles[index],
+            path.resolve(dumpFolder, '..', 'extracted'),
+          ).then();
+          await moveFile(
+            `${dumpFolder}/${dumpFolderFiles[index]}`,
+            `${path.resolve(dumpFolder, '..', 'readedFile')}/${
+              dumpFolderFiles[index]
+            }.${Date.now()}`,
+          );
+          resolve();
+        });
+      });
+    }
 
     const extractedDir = path.resolve(dumpFolder, '..', 'extracted');
     process.chdir(extractedDir);
@@ -45,11 +51,16 @@ class ReadDumpFile {
         err != null ? reject(err) : resolve(filenames),
       );
     });
-    extractedFolderFiles.forEach(name => {
-      archiveLines = fs.readFileSync(name).toString().split('\n');
+
+    const chunkedData: any[][] = await new Promise((resolve, _) => {
+      extractedFolderFiles.forEach(name => {
+        archiveLines = fs.readFileSync(name).toString().split('\n');
+        // fs.unlinkSync(name);
+      });
+      const archiveLinesChunked = chunk(archiveLines, 10);
+      return resolve(archiveLinesChunked);
     });
-    const archiveLinesChunked = chunk(archiveLines, 10);
-    return archiveLinesChunked;
+    return chunkedData;
   }
 }
 
