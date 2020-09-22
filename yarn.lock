@@ -64,6 +64,11 @@
     "@types/connect" "*"
     "@types/node" "*"
 
+"@types/chunk@^0.0.0":
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/@types/chunk/-/chunk-0.0.0.tgz#644651a09113cb500a8563f5c8a9de657aa292c9"
+  integrity sha512-8z7Z9E1UoxUfwb4SUuWZZCAa5T+vi2daACygqUed7NpPnq04CJo0L3l0heHh3R9fLi/pOUbfR/ZwHd2+YEQIxg==
+
 "@types/color-name@^1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@types/color-name/-/color-name-1.1.1.tgz#1c1261bbeaa10a8055bbc5d8ab84b7b2afc846a0"
@@ -82,6 +87,13 @@
   integrity sha512-sOdDRU3oRS7LBNTIqwDkPJyq0lpHYcbMTt0TrjzsXbk/e37hcLTH6eZX7CdbDeN0yJJvzw9hFBZkbtCSbk/jAQ==
   dependencies:
     "@types/express" "*"
+
+"@types/decompress@^4.2.3":
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/@types/decompress/-/decompress-4.2.3.tgz#98eed48af80001038aa05690b2094915f296fe65"
+  integrity sha512-W24e3Ycz1UZPgr1ZEDHlK4XnvOr+CpJH3qNsFeqXwwlW/9END9gxn3oJSsp7gYdiQxrXUHwUUd3xuzVz37MrZQ==
+  dependencies:
+    "@types/node" "*"
 
 "@types/express-serve-static-core@*":
   version "4.17.12"
@@ -584,6 +596,11 @@ chokidar@^3.4.0:
     readdirp "~3.4.0"
   optionalDependencies:
     fsevents "~2.1.2"
+
+chunk@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/chunk/-/chunk-0.0.3.tgz#d4f7473e35439c543d1d209464c27839e2b51d7a"
+  integrity sha512-oGfwvhjGRW3Ks4GTdGoJhZWKEO1eomjOC26001R+5H0TIlP7vBCO+/XcNcPCA6ayYC7RQSq1/NsN4679Odcm5A==
 
 ci-info@^2.0.0:
   version "2.0.0"
@@ -2297,6 +2314,13 @@ morgan@^1.9.1:
     depd "~2.0.0"
     on-finished "~2.3.0"
     on-headers "~1.0.2"
+
+move-file@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/move-file/-/move-file-2.0.0.tgz#83ffa309b5d7f69d518b28e1333e2ffadf331e3e"
+  integrity sha512-cdkdhNCgbP5dvS4tlGxZbD+nloio9GIimP57EjqFhwLcMjnU+XJKAZzlmg/TN/AK1LuNAdTSvm3CPPP4Xkv0iQ==
+  dependencies:
+    path-exists "^4.0.0"
 
 ms@2.0.0:
   version "2.0.0"
