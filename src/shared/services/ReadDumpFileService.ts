@@ -5,6 +5,7 @@ import * as fs from 'fs';
 import path from 'path';
 import moveFile from 'move-file';
 import chunk from 'chunk';
+import AppError from '@shared/errors/AppErrors';
 
 @injectable()
 class ReadDumpFile {
@@ -19,10 +20,8 @@ class ReadDumpFile {
       'newFile',
     );
 
-    const dumpFolderFiles: any[] = await new Promise((resolve, reject) => {
-      return fs.readdir(dumpFolder, (err, filenames) =>
-        err != null ? reject(err) : resolve(filenames),
-      );
+    const dumpFolderFiles: any[] = await new Promise((resolve, _) => {
+      return fs.readdir(dumpFolder, (__, filenames) => resolve(filenames));
     });
 
     process.chdir(dumpFolder);
@@ -42,14 +41,17 @@ class ReadDumpFile {
           resolve();
         });
       });
+    } else {
+      throw new AppError(
+        'You need put input-dump.tar.gz on newFile folder on tmp folder',
+        400,
+      );
     }
 
     const extractedDir = path.resolve(dumpFolder, '..', 'extracted');
     process.chdir(extractedDir);
-    const extractedFolderFiles: any[] = await new Promise((resolve, reject) => {
-      return fs.readdir(extractedDir, (err, filenames) =>
-        err != null ? reject(err) : resolve(filenames),
-      );
+    const extractedFolderFiles: any[] = await new Promise((resolve, _) => {
+      return fs.readdir(extractedDir, (__, filenames) => resolve(filenames));
     });
 
     const chunkedData: any[][] = await new Promise((resolve, _) => {

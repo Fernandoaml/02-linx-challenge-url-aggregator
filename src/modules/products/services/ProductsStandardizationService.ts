@@ -42,22 +42,21 @@ async function standardization(products: any[]) {
       });
     }
     const productIndex = productsList.findIndex(i => i.productId === productId);
-    if (productsList[productIndex].image.length > 3) {
-      return;
-    }
-    for (
-      let ImgIndex = 0;
-      ImgIndex < productsList[productIndex].image.length;
-      ImgIndex++
-    ) {
-      if (productsList[productIndex].image[ImgIndex] === image) {
-        return;
-      }
-      // eslint-disable-next-line no-await-in-loop
-      const searchedData = await apiQuery(image);
-      if (productsList[productIndex].image.length < 3) {
+    if (productsList[productIndex].image.length < 3) {
+      for (
+        let ImgIndex = 0;
+        ImgIndex < productsList[productIndex].image.length;
+        ImgIndex++
+      ) {
+        if (productsList[productIndex].image[ImgIndex] === image) {
+          return;
+        }
+        // eslint-disable-next-line no-await-in-loop
+        const searchedData = await apiQuery(image);
         if (searchedData) {
-          productsList[productIndex].image.push(image);
+          if (productsList[productIndex].image.length < 3) {
+            productsList[productIndex].image.push(image);
+          }
         }
       }
     }
@@ -70,22 +69,14 @@ class ProductsStandardizationService {
   public async execute(chunkedData: any[][]): Promise<any> {
     const inquiredChunked = chunkedData.map(async products => {
       const splitedProducts = chunk(products, 4);
-      if (splitedProducts.length <= 3) {
-        await Promise.all([
-          standardization(splitedProducts[0]),
-          standardization(splitedProducts[1]),
-          standardization(splitedProducts[2]),
-        ]);
-      } else if (splitedProducts.length > 3) {
-        await Promise.all([
-          standardization(splitedProducts[0]),
-          standardization(splitedProducts[1]),
-          standardization(splitedProducts[2]),
-          standardization(splitedProducts[3]),
-          standardization(splitedProducts[4]),
-          standardization(splitedProducts[5]),
-        ]);
-      }
+      await Promise.all([
+        standardization(splitedProducts[0]),
+        standardization(splitedProducts[1]),
+        standardization(splitedProducts[2]),
+        standardization(splitedProducts[3]),
+        standardization(splitedProducts[4]),
+        standardization(splitedProducts[5]),
+      ]);
     });
     await Promise.all(inquiredChunked);
     return productsList;
