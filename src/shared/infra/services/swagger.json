@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "version": "1.0.0",
-    "title": "01 - Linx Challenge Products API",
+    "title": "02 - Linx Challenge URL Aggregator",
     "description": "some information about my Linx back end...",
     "license": {
       "name": "MIT",
@@ -28,21 +28,12 @@
   ],
   "paths": {
     "/products":{
-      "post": {
+      "get": {
         "tags": [
-          "Products"
+          "Images"
         ],
-        "summary": "Create a new document through business rule.",
-        "parameters": [
-          {
-            "in": "body",
-            "name": "Products",
-            "description": "Create a new Product",
-            "schema": {
-              "$ref": "#/definitions/New_Product"
-            }
-          }
-        ],
+        "summary": "URL list with good quality data",
+
         "produces":[
           "application/json"
         ],
@@ -50,45 +41,42 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/Product"
+              "$ref": "#/definitions/Image"
             }
           },
           "500": {
-            "description": "Internal Server Error, review the product data."
+            "description": "Internal Server Error, review the image data."
           },
           "400": {
             "description": "Failed.. Bad post data."
-          },
-          "429": {
-            "description": "Too many requests with the same data."
           }
         }
       }
     }
   },
   "definitions": {
-    "New_Product": {
+    "New_Image": {
       "properties": {
         "id": {
           "type": "string",
-          "description": "Ex: 192333"
+          "description": "Ex: pid1"
         },
         "name": {
           "type": "string",
-          "description": "Ex: Cadeira"
+          "description": "Ex: http://www.linx.com.br/platform-test/3.png"
         }
       }
     },
-    "Product": {
+    "Image": {
       "type": "object",
       "properties": {
         "products":{
-          "$ref": "#/definitions/New_Product"
+          "$ref": "#/definitions/New_Image"
         },
-        "fullDate": {
-          "type": "number"
+        "productId": {
+          "type": "string"
         },
-        "ip": {
+        "image": {
           "type": "string"
         }
       }
