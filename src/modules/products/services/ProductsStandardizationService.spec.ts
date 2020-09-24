@@ -15,6 +15,5 @@ describe('ProductsStandardizationService', () => {
     const data = await productsStandardizationService.execute(dumpData);
 
     expect(data.length).toBeGreaterThan(0);
-    // expect(1 + 1).toBe(2);
   });
 });
