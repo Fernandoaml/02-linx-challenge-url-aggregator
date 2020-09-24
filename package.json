@@ -12,14 +12,17 @@
     "test": "jest"
   },
   "dependencies": {
+    "axios": "^0.20.0",
     "chunk": "^0.0.3",
     "class-transformer": "^0.3.1",
     "cors": "^2.8.5",
     "decompress": "^4.2.1",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
     "move-file": "^2.0.0",
     "reflect-metadata": "^0.1.13",
+    "remove-blank-lines": "^1.4.1",
     "tsyringe": "^4.3.0"
   },
   "devDependencies": {

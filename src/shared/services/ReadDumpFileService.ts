@@ -54,10 +54,10 @@ class ReadDumpFile {
 
     const chunkedData: any[][] = await new Promise((resolve, _) => {
       extractedFolderFiles.forEach(name => {
-        archiveLines = fs.readFileSync(name).toString().split('\n');
+        archiveLines = fs.readFileSync(name).toString().trim().split('\n');
         // fs.unlinkSync(name);
       });
-      const archiveLinesChunked = chunk(archiveLines, 10);
+      const archiveLinesChunked = chunk(archiveLines, 1000);
       return resolve(archiveLinesChunked);
     });
     return chunkedData;
