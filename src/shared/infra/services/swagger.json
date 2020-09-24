@@ -1,0 +1,85 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "02 - Linx Challenge URL Aggregator",
+    "description": "some information about my Linx back end...",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "localhost:3333",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Repositories",
+      "description": "https://github.com/Fernandoaml/01-linx-challenge-products-api"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "consumes":[
+    "application/json"
+  ],
+  "produces":[
+    "application/json"
+  ],
+  "paths": {
+    "/products":{
+      "get": {
+        "tags": [
+          "Images"
+        ],
+        "summary": "URL list with good quality data",
+
+        "produces":[
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Image"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error, review the image data."
+          },
+          "400": {
+            "description": "Failed.. Bad post data."
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "New_Image": {
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Ex: pid1"
+        },
+        "name": {
+          "type": "string",
+          "description": "Ex: http://www.linx.com.br/platform-test/3.png"
+        }
+      }
+    },
+    "Image": {
+      "type": "object",
+      "properties": {
+        "products":{
+          "$ref": "#/definitions/New_Image"
+        },
+        "productId": {
+          "type": "string"
+        },
+        "image": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
