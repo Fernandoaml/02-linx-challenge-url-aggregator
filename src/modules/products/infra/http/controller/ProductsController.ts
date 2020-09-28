@@ -1,19 +1,20 @@
+import 'reflect-metadata';
+
 import { Request, Response } from 'express';
 import 'express-async-errors';
-import { container } from 'tsyringe';
 import { classToClass } from 'class-transformer';
 
-import ReadDumpFileService from '@shared/services/ReadDumpFileService';
-import ProductsStandardizationService from '@modules/products/services/ProductsStandardizationService';
+import { productsList } from '@modules/products/services/TriggerToProcessProducts';
+import AppError from '@shared/errors/AppErrors';
 
 export default class ProductsController {
   public async index(request: Request, response: Response): Promise<Response> {
-    const readDumpFileService = container.resolve(ReadDumpFileService);
-    const productsStandardizationService = container.resolve(
-      ProductsStandardizationService,
-    );
-    const dumpData = await readDumpFileService.execute();
-    const data = await productsStandardizationService.execute(dumpData);
-    return response.json(classToClass(data));
+    if (productsList.length === 0) {
+      throw new AppError(
+        "We  don't have all of data yet. Please try again later",
+        401,
+      );
+    }
+    return response.json(classToClass(productsList));
   }
 }
