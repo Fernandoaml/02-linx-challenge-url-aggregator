@@ -6,8 +6,10 @@ import 'express-async-errors';
 import cors from 'cors';
 import AppError from '@shared/errors/AppErrors';
 import routes from '@shared/infra/http/routes';
+import TriggerToProcessProducts from '@modules/products/services/TriggerToProcessProducts';
 
 import '@shared/container';
+import { container } from 'tsyringe';
 
 const app = express();
 
@@ -31,6 +33,8 @@ app.use(
   },
 );
 
-app.listen(3333, () => {
+app.listen(3333, async () => {
   console.log('Server started on port 3333');
+  const triggerToProcessProducts = container.resolve(TriggerToProcessProducts);
+  await triggerToProcessProducts.execute();
 });
