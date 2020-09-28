@@ -41,37 +41,31 @@ description: organize the dump file and expose over less time. api with sanitize
 
 * ReadDumpFileService:
   * The first step: the script require the input-dump.tar.gz in tmp/newFile folder. Where they are unzipped and the extracted file will be movendo to tmp/extracted folder. The script will be read the file convert data to string and remove leading and trailing white spaces, and delete the file. After this the collected data will be chunked in parts of 1000, and return this data.
-* ProductsStandardizationService:
-  * This step will be chunk the 1000 data size, in block data with 4 blocks of 250 each, to run in parallel and reduce the processing time of **71000 lines in 24.3s to 3.43s**. As shown in the following images.
+* TriggerToProcessProducts:
+  * This service, call another's services on in your execution order. createProductService and createProductCacheService After all return the execution time like image bellow.
+  * I preferred save every data, data of bad images \(404\) in database redis, to decrease memory use, and processes in steps 1000 length of data size.
+  * This step will be **chunk the 1000 data size**, I have tried to run many tasks in parallels, but occurredthere was an increase of 20 to 25% in processing, in addition to slowing down the process, where the minimum completion time was approximately 00:04:30. Where the simple prevailed being faster **~ 00:03:00**, as shown in the image below.
 
-![Time to compleate task without optimization](.gitbook/assets/screenshot_1.png)
-
-![Time to compleate task with optimization](.gitbook/assets/screenshot_2.png)
+![](.gitbook/assets/output.png)
 
 * Continuing:
-  * The next step is verify what product id as in product list. If this product does not exist on list the script will be call the api to validate the image response, where if the return is false they will go to next interation. And if they recive a true response the data will be pushed to productsList.
-  * When the data has in productsList the script will be verify if the image length is les than 3. If yes it will verify if the image link has existing on productList. If Not exist it will verify the response of api to especified image, using the same strategy to save image. Return a list of JSON data with good images, with max 3 images, with less consult to API.
+  * The next step is verify what product id as in product list. If this product does not exist on list the script will be call the api to validate the image response, where if the return is false they will go to next interation and the bad image go to "404-Products-List" on redis to decrease the api's calls . And if they recive a true response the data will be pushed to productsList.
+  *  When the data has in productsList the script will be verify if the image length is les than 3. If yes it will verify if the image link has existing on productList. If Not exist it will verify the response of api to especified image, using the same strategy to save image. Return a list of JSON data with good images, with max 3 images, with less consult to API.
 
 ```text
 [
   {
-    "productId": "pid2436",
+    "productId": "pid1613",
     "image": [
-      "http://localhost:4567/images/67717.png",
-      "http://localhost:4567/images/162252.png"
+      "http://localhost:4567/images/122578.png",
+      "http://localhost:4567/images/122579.png",
+      "http://localhost:4567/images/122577.png"
     ]
   },
   {
-    "productId": "pid1376",
+    "productId": "pid7471",
     "image": [
-      "http://localhost:4567/images/13339.png"
-    ]
-  },
-  {
-    "productId": "pid6127",
-    "image": [
-      "http://localhost:4567/images/168794.png",
-      "http://localhost:4567/images/7878.png"
+      "http://localhost:4567/images/177204.png"
     ]
   }
 ]
@@ -117,33 +111,50 @@ I applied the DDD \(Domain-Driven Design\), segmented through knowledge area \(m
       1. Ex: 12.18.3 LTS
 2. After the node js install, you should be install the yarn Package Manager
    1. **npm install -g yarn**
-3. **You need clone the back end project:**
-   1. [https://github.com/Fernandoaml/02-linx-challenge-url-aggregator.git](https://github.com/Fernandoaml/02-linx-challenge-url-aggregator.git)
-   2. Go to the folder and on command line interface you must be run this command: **yarn**
-   3. Verify if the **input-dump.tar.gz**  _**\(is in tmp/newFile folder\).**_
-4. **After run: yarn dev:server**
-5. Now you can call the api to process the data file:
+3. \*\*\*\*
 
-![](.gitbook/assets/image.png)
+    You need the docker on you computer.
+
+   1. [https://www.docker.com/get-started](https://www.docker.com/get-started)
+   2. You should run this command on command line interface with access to docker \( docker run --name redis -e ALLOW\_EMPTY\_PASSWORD=yes -p 6379:6379 -d bitnami/redis:latest \).
+      1. don't need to change anything.
+
+4. **You need clone the back end project:**
+   1. [https://github.com/Fernandoaml/02-linx-challenge-url-aggregator](https://github.com/Fernandoaml/02-linx-challenge-url-aggregator)
+   2. Go to the folder and on command line interface you must be run this command: **yarn**
+   3. You need rename the \(**.env copy**\) file to **.env**
+      1. And don't need to change anything.
+   4. Download the archive with data to make the tests on bellow link:
+      1. [https://1drv.ms/u/s!As2AL5ftMDFL\_UYmd\_4n3vyjgbvf?e=ueswi1](https://1drv.ms/u/s!As2AL5ftMDFL_UYmd_4n3vyjgbvf?e=ueswi1)
+   5. Verify if the **input-dump.tar.gz**  _**\(is in tmp/newFile folder\).**_
+      1. \*\*Remember: Jus One tar.gz file on newFile Folder. every time you will run the program you need put the tar.gz on newFile Folder. This simulate ex: the data has come from ftp or s3 has many possibility. And the run the script every 10 minutes, we can due with docker or manipulate the linux commands with our program.
+5. **After run: yarn dev:server**
+   1. Now in this step the script behind of the scene, is running the \(TriggerToProcessProducts.ts\) to expose the JSON data like a below image. Before the task as be complete if you consult the api url you will receive the follow message: _"We don't have all of data yet. Please try again later"_
+   2. And when the task as completed you will receve the JSON data. like image below.
+   3. \*Obs: For subsequent executions, this is when the "CRON JOB" is applied. D-1 data will be shown until the current process is completed
+
+![](.gitbook/assets/json_ok.png)
 
 ## **Tests:**
 
 * **Back End:**
   * To Back end i used the JEST to make the TDD aplying unity tests
   * If you're with command line opened, you must open a new interface of command line in the same folder and run the next command.
+    * \*OBS: You need put the archive input-dump.tar.gz from Testes folder and run below command.
     * **yarn test**
 
-![](.gitbook/assets/image%20%281%29.png)
+![](.gitbook/assets/jest%20%281%29.png)
 
 * **To see the coverage report \(Lcov-report\) you need to open the following file**:
+
   * \02-linx-challenge-url-aggregator\coverage\lcov-report\index.html
+
+![](.gitbook/assets/licov.png)
 
 ## API - Swagger UI
 
 * after of initialization of back-end. You will can access the Swagger page, to see the description of the API REST of 02-linx-challenge-url-aggregator. The page as exemplification, as shown in the image below.
-  * [http://localhost:3333/swagger/](http://localhost:3333/swagger/)
+  * [http://localhost:3333/swagger/](http://localhost:3333/swagger/) 
 
-![](.gitbook/assets/swagger_ok.png)
-
-![](.gitbook/assets/swagger_fail.png)
+![](.gitbook/assets/swagger.png)
 
