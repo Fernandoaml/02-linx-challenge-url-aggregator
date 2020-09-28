@@ -4,8 +4,7 @@
 
 ### Node ###
 # Logs
-tmp/extracted
-tmp/readedFile
+
 logs
 *.log
 npm-debug.log*
