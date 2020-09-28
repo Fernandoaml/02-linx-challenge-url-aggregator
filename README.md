@@ -111,14 +111,10 @@ I applied the DDD \(Domain-Driven Design\), segmented through knowledge area \(m
       1. Ex: 12.18.3 LTS
 2. After the node js install, you should be install the yarn Package Manager
    1. **npm install -g yarn**
-3. \*\*\*\*
-
-    You need the docker on you computer.
-
+3. You need the docker on you computer.
    1. [https://www.docker.com/get-started](https://www.docker.com/get-started)
    2. You should run this command on command line interface with access to docker \( docker run --name redis -e ALLOW\_EMPTY\_PASSWORD=yes -p 6379:6379 -d bitnami/redis:latest \).
       1. don't need to change anything.
-
 4. **You need clone the back end project:**
    1. [https://github.com/Fernandoaml/02-linx-challenge-url-aggregator](https://github.com/Fernandoaml/02-linx-challenge-url-aggregator)
    2. Go to the folder and on command line interface you must be run this command: **yarn**
